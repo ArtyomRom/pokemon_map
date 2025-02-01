@@ -1,3 +1,18 @@
-from django.db import models  # noqa F401
+from django.db import models, migrations  # noqa F401
 
-# your models here
+
+class Pokemon(models.Model):
+    title = models.CharField(max_length=200)
+
+class Migration(migrations.Migration):
+    dependencies = [
+        ('pokemon_entities', '0001_initial'),
+    ]
+    # your models here
+    operations = [migrations.CreateModel(
+        name='Pokemon',
+        fields=[
+            ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+            ('title', models.CharField(max_length=255)),
+        ]
+    )]
