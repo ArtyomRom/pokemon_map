@@ -8,7 +8,13 @@ class Pokemon(models.Model):
     def __str__(self):
         return self.title
 
+class PokemonEntity(models.Model):
+    lat = models.FloatField()
+    lon = models.FloatField()
 
+    def __str__(self):
+        return self.lat, self.lon
+    
 class Migration(migrations.Migration):
     dependencies = [
         ('pokemon_entities', '0001_initial'),
