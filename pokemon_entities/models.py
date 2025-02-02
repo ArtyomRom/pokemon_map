@@ -9,12 +9,13 @@ class Pokemon(models.Model):
         return self.title
 
 class PokemonEntity(models.Model):
+    pokemon = models.ForeignKey(Pokemon, on_delete=models.SET_NULL, null=True)
     lat = models.FloatField()
     lon = models.FloatField()
 
     def __str__(self):
-        return self.lat, self.lon
-    
+        return self.lat, self.lon, self.pokemon
+
 class Migration(migrations.Migration):
     dependencies = [
         ('pokemon_entities', '0001_initial'),
