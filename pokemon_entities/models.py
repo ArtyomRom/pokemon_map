@@ -21,7 +21,7 @@ class PokemonEntity(models.Model):
     stamina = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.lat, self.lon, self.pokemon
+        return f'{self.pokemon} ({self.lat}, {self.lon})'
 
 class Migration(migrations.Migration):
     dependencies = [
