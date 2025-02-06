@@ -3,7 +3,8 @@ from django.utils import timezone
 
 class Pokemon(models.Model):
     title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='pokemon_map/pokemon_entities/', blank=True, null=True)
+    image = models.ImageField(upload_to='pokemon_map/pokemon_entities/', blank=True, null=True,
+                              default=None)
 
     def __str__(self):
         return self.title
@@ -21,7 +22,7 @@ class PokemonEntity(models.Model):
     stamina = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.pokemon, self.lat, self.lon
+        return f'{self.pokemon}, {self.lat}, {self.lon}'
 
 class Migration(migrations.Migration):
     dependencies = [
