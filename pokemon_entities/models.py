@@ -1,6 +1,7 @@
 from django.db import models, migrations  # noqa F401
 from django.utils import timezone
 
+
 class Pokemon(models.Model):
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='pokemon_map/pokemon_entities/', blank=True, null=True,
@@ -8,9 +9,20 @@ class Pokemon(models.Model):
     description = models.TextField(blank=True, null=True, default='Информации о покемоне нет')
     title_en = models.CharField(max_length=200, blank=True, null=True)
     title_jp = models.CharField(max_length=200, blank=True, null=True)
+    previous_evolution = models.ForeignKey('self',
+                                           on_delete=models.SET_NULL,
+                                           null=True,
+                                           related_name='next_evolutions',
+                                           blank=True)
+    next_evolution = models.ForeignKey('self',
+                                       on_delete=models.SET_NULL,
+                                       null=True,
+                                       related_name='previous_evolution_v2',
+                                       blank=True)
 
     def __str__(self):
         return self.title
+
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.SET_NULL, null=True)
@@ -26,6 +38,7 @@ class PokemonEntity(models.Model):
 
     def __str__(self):
         return f'{self.pokemon}, {self.lat}, {self.lon}'
+
 
 class Migration(migrations.Migration):
     dependencies = [
