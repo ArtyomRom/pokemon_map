@@ -1,7 +1,7 @@
 import folium
 from django.shortcuts import render
 from django.utils import timezone
-
+from django.shortcuts import get_object_or_404
 from pokemon_entities.models import Pokemon, PokemonEntity
 
 MOSCOW_CENTER = [55.751244, 37.618423]
@@ -52,7 +52,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
     pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
     evolution = pokemon.next_evolutions.all()[0] if pokemon.next_evolutions.all() else ''
 

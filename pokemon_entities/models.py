@@ -1,6 +1,5 @@
 from django.db import models, migrations  # noqa F401
-from django.utils import timezone
-
+from django.core.validators import MinValueValidator
 
 class Pokemon(models.Model):
     '''Покемон'''
@@ -24,15 +23,15 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     '''Сущность покемона'''
     pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.PROTECT, null=False, blank=False, related_name='pokemon_entity')
-    lat = models.FloatField('Долгота', blank=True)
-    lon = models.FloatField('Широта', blank=True)
-    appeared_at = models.DateTimeField('Появился на карте', default=timezone.now, blank=True)
-    disappeared_at = models.DateTimeField('Исчез с карты', default=timezone.now, blank=True)
-    level = models.IntegerField('Уровень', default=0)
-    health = models.IntegerField('Здоровье', default=0)
-    strength = models.IntegerField('Сила', default=0)
-    defence = models.IntegerField('Защита', default=0)
-    stamina = models.IntegerField('Выносливость', default=0)
+    lat = models.FloatField('Долгота')
+    lon = models.FloatField('Широта')
+    appeared_at = models.DateTimeField('Появился на карте')
+    disappeared_at = models.DateTimeField('Исчез с карты')
+    level = models.IntegerField('Уровень', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
+    health = models.IntegerField('Здоровье', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
+    strength = models.IntegerField('Сила', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
+    defence = models.IntegerField('Защита', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
+    stamina = models.IntegerField('Выносливость', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
 
     def __str__(self):
         return f'{self.pokemon}, {self.lat}, {self.lon}'
