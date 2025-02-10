@@ -15,11 +15,11 @@ class Pokemon(models.Model):
                                            null=True,
                                            related_name='next_evolutions',
                                            blank=True, )
-    next_evolution = models.ForeignKey('self', verbose_name='Потомок',
-                                       on_delete=models.SET_NULL,
-                                       null=True,
-                                       related_name='previous_evolution_v2',
-                                       blank=True, )
+    # next_evolution = models.ForeignKey('self', verbose_name='Потомок',
+    #                                    on_delete=models.SET_NULL,
+    #                                    null=True,
+    #                                    related_name='previous_evolution_v2',
+    #                                    blank=True, )
 
     def __str__(self):
         return self.title

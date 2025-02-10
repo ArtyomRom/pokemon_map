@@ -1,13 +1,8 @@
 import folium
-import json
-
-from django.http import HttpResponseNotFound
 from django.shortcuts import render
-from django.utils.datetime_safe import datetime
-from django.utils.timezone import localtime
 from django.utils import timezone
-from pokemon_entities.models import Pokemon, PokemonEntity
 
+from pokemon_entities.models import Pokemon, PokemonEntity
 
 MOSCOW_CENTER = [55.751244, 37.618423]
 DEFAULT_IMAGE_URL = (
@@ -65,7 +60,7 @@ def show_pokemon(request, pokemon_id):
     #     pokemons = json.load(database)['pokemons']
     pokemon = Pokemon.objects.get(id=pokemon_id)
     pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
-
+    evolution = pokemon.next_evolutions.all()[0] if pokemon.next_evolutions.all() else ''
     # for pokemon in pokemons:
     #     if pokemon['pokemon_id'] == int(pokemon_id):
     #         requested_pokemon = pokemon
@@ -79,7 +74,7 @@ def show_pokemon(request, pokemon_id):
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
             pokemon_entity.pokemon.image.path if pokemon_entity.pokemon.image else DEFAULT_IMAGE_URL
-            )
+        )
 
     # pokemon = Pokemon.objects.get(id=pokemon_id)
     pokemon_entity = {
@@ -93,12 +88,12 @@ def show_pokemon(request, pokemon_id):
             'id': pokemon.previous_evolution.id,
             'img_url': pokemon.previous_evolution.image.url if pokemon.previous_evolution and pokemon.previous_evolution.image else '',
             'title_ru': pokemon.previous_evolution.title if pokemon.previous_evolution else '',
-            } if pokemon.previous_evolution else None,
+        } if pokemon.previous_evolution else None,
         'next_evolution': {
-            'id': pokemon.next_evolution.id,
-            'img_url': pokemon.next_evolution.image.url if pokemon.next_evolution and pokemon.next_evolution.image else '',
-            'title_ru': pokemon.next_evolution.title if pokemon.next_evolution else '',
-            } if pokemon.next_evolution else None,
+            'id': evolution.id,
+            'img_url': evolution.image.url if evolution.image else '',
+            'title_ru': evolution.title if evolution.title else '',
+        } if evolution else None,
 
     }
     return render(request, 'pokemon.html', context={
