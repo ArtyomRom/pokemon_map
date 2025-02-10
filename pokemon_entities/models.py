@@ -15,11 +15,7 @@ class Pokemon(models.Model):
                                            null=True,
                                            related_name='next_evolutions',
                                            blank=True, )
-    # next_evolution = models.ForeignKey('self', verbose_name='Потомок',
-    #                                    on_delete=models.SET_NULL,
-    #                                    null=True,
-    #                                    related_name='previous_evolution_v2',
-    #                                    blank=True, )
+
 
     def __str__(self):
         return self.title
@@ -27,7 +23,7 @@ class Pokemon(models.Model):
 
 class PokemonEntity(models.Model):
     '''Сущность покемона'''
-    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.SET_NULL, null=True, related_name='pokemon_entity')
+    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.PROTECT, null=False, blank=False, related_name='pokemon_entity')
     lat = models.FloatField('Долгота', blank=True)
     lon = models.FloatField('Широта', blank=True)
     appeared_at = models.DateTimeField('Появился', default=timezone.now, blank=True)
@@ -42,15 +38,3 @@ class PokemonEntity(models.Model):
         return f'{self.pokemon}, {self.lat}, {self.lon}'
 
 
-class Migration(migrations.Migration):
-    dependencies = [
-        ('pokemon_entities', '0001_initial'),
-    ]
-    # your models here
-    operations = [migrations.CreateModel(
-        name='Pokemon',
-        fields=[
-            ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-            ('title', models.CharField(max_length=255)),
-        ]
-    )]
