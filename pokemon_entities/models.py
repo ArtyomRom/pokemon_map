@@ -3,12 +3,12 @@ from django.core.validators import MinValueValidator
 
 class Pokemon(models.Model):
     '''Покемон'''
-    title = models.CharField('Имя покемона', max_length=200, blank=False, null=False)
-    image = models.ImageField('Изображения покемона', upload_to='pokemon_map/pokemon_entities/', blank=True, null=True,
+    title = models.CharField(verbose_name='Имя покемона', max_length=200, blank=False, null=False)
+    image = models.ImageField(verbose_name='Изображения покемона', upload_to='pokemon_map/pokemon_entities/', blank=True, null=True,
                               default=None)
-    description = models.TextField('Описание покемона', blank=True, default='Информации о покемоне нет')
-    title_en = models.CharField('Имя по английски', max_length=200, null=False)
-    title_jp = models.CharField('Имя по японски', max_length=200, null=False)
+    description = models.TextField(verbose_name='Описание покемона', blank=True, default='Информации о покемоне нет')
+    title_en = models.CharField(verbose_name='Имя по английски', max_length=200, blank=True, null=True)
+    title_jp = models.CharField(verbose_name='Имя по японски', max_length=200, blank=True, null=True)
     previous_evolution = models.ForeignKey('self', verbose_name='Предок',
                                            on_delete=models.SET_NULL,
                                            null=True,
@@ -22,16 +22,18 @@ class Pokemon(models.Model):
 
 class PokemonEntity(models.Model):
     '''Сущность покемона'''
-    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.PROTECT, null=False, blank=False, related_name='pokemon_entity')
-    lat = models.FloatField('Долгота')
-    lon = models.FloatField('Широта')
-    appeared_at = models.DateTimeField('Появился на карте')
-    disappeared_at = models.DateTimeField('Исчез с карты')
-    level = models.IntegerField('Уровень', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
-    health = models.IntegerField('Здоровье', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
-    strength = models.IntegerField('Сила', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
-    defence = models.IntegerField('Защита', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
-    stamina = models.IntegerField('Выносливость', default=0, blank=False, null=False, validators=[MinValueValidator(0)])
+    pokemon = models.ForeignKey(Pokemon, verbose_name='Покемон', on_delete=models.PROTECT, null=False, blank=False, related_name='pokemon')
+    lat = models.FloatField(verbose_name='Долгота', null=False, blank=False)
+    lon = models.FloatField(verbose_name='Широта', null=False, blank=False)
+    appeared_at = models.DateTimeField(verbose_name='Появился на карте', null=False, blank=False)
+    disappeared_at = models.DateTimeField(verbose_name='Исчез с карты', null=False, blank=False)
+    level = models.PositiveIntegerField(verbose_name='Уровень', default=0, blank=True, validators=[MinValueValidator(0)])
+    health = models.PositiveIntegerField(verbose_name='Здоровье', default=0, blank=True, validators=[MinValueValidator(0)])
+    strength = models.SmallIntegerField(verbose_name='Сила', default=0, blank=True, validators=[MinValueValidator(0)])
+    defence = models.SmallIntegerField(verbose_name='Защита', default=0, blank=True, validators=[MinValueValidator(0)])
+    stamina = models.SmallIntegerField(verbose_name='Выносливость', default=0, blank=True, validators=[MinValueValidator(0)])
+
+
 
     def __str__(self):
         return f'{self.pokemon}, {self.lat}, {self.lon}'
